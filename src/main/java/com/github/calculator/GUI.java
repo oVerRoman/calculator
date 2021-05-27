@@ -12,9 +12,9 @@ import javax.swing.JTextField;
 
 import com.github.calculator.math.Calculator;
 
-public class GUI implements ActionListener {
+public class GUI extends JFrame implements ActionListener {
 
-    private JFrame frame;
+    private static final long serialVersionUID = 1L;
     private JTextField textField;
     private JButton[] numberButtons = new JButton[10];
     private JButton[] functionButtons = new JButton[9];
@@ -35,6 +35,7 @@ public class GUI implements ActionListener {
     private char operator;
 
     public GUI() {
+        super("Calculator");
         setupFrame();
         setupTextField();
         setupButtons();
@@ -42,31 +43,39 @@ public class GUI implements ActionListener {
         addElementsToFrame();
     }
 
-    private void setupFrame() {
-        frame = new JFrame("Calculator");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(420, 550);
-        frame.setLayout(null); // no one scheme is used
-        frame.setResizable(false);
+    public void setupFrame() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(420, 550);
+        setLayout(null); // no one scheme is used
+        setResizable(false);
     }
 
-    private void setupTextField() {
+    public void setupTextField() {
         textField = new JTextField();
         textField.setBounds(50, 25, 300, 50);
         textField.setFont(font);
         textField.setEditable(false);
     }
 
-    private void setupButtons() {
+    public void setupButtons() {
         addButton = new JButton("+");
+        addButton.setName("plus");
         subtractButton = new JButton("-");
+        subtractButton.setName("minus");
         multiplyButton = new JButton("*");
+        multiplyButton.setName("times");
         divideButton = new JButton("/");
+        divideButton.setName("obelus");
         decimalButton = new JButton(".");
+        decimalButton.setName("decimal");
         equalButton = new JButton("=");
+        equalButton.setName("equal");
         deleteButton = new JButton("<<");
+        deleteButton.setName("delete");
         clearButton = new JButton("C");
+        clearButton.setName("clear");
         negativeButton = new JButton("+/-");
+        negativeButton.setName("negative");
         functionButtons[0] = addButton;
         functionButtons[1] = subtractButton;
         functionButtons[2] = multiplyButton;
@@ -83,6 +92,7 @@ public class GUI implements ActionListener {
         }
         for (int i = 0; i < 10; i++) {
             numberButtons[i] = new JButton(String.valueOf(i));
+            numberButtons[i].setName(String.valueOf(i));
             numberButtons[i].addActionListener(this);
             numberButtons[i].setFont(font);
             numberButtons[i].setFocusable(false);// to avoid line around symbol
@@ -92,7 +102,7 @@ public class GUI implements ActionListener {
         negativeButton.setBounds(250, 430, 100, 50);
     }
 
-    private void setupPanel() {
+    public void setupPanel() {
         panel = new JPanel();
         panel.setBounds(50, 100, 300, 300);
         panel.setLayout(new GridLayout(4, 4, 10, 10));
@@ -114,15 +124,16 @@ public class GUI implements ActionListener {
         panel.add(divideButton);
     }
 
-    private void addElementsToFrame() {
-        frame.add(panel);
-        frame.add(deleteButton);
-        frame.add(clearButton);
-        frame.add(negativeButton);
-        frame.add(textField);
-        frame.setVisible(true);
+    public void addElementsToFrame() {
+        add(panel);
+        add(deleteButton);
+        add(clearButton);
+        add(negativeButton);
+        add(textField);
+        setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         for (int i = 0; i < 10; i++) {
             if (e.getSource() == numberButtons[i]) {
@@ -135,6 +146,8 @@ public class GUI implements ActionListener {
         if (e.getSource() == decimalButton && !textField.getText().contains(".")) {
             if (textField.getText().equals("") || textField.getText().contains("Infinity")) {
                 textField.setText("0.");
+            } else if (textField.getText().equals("-")) {
+                textField.setText("-0.");
             } else {
                 textField.setText(textField.getText().concat("."));
             }
@@ -186,6 +199,9 @@ public class GUI implements ActionListener {
             textField.setText("");
             for (int i = 0; i < currentText.length() - 1; i++) {
                 textField.setText(textField.getText().concat(String.valueOf(currentText.charAt(i))));
+            }
+            if (textField.getText().equals("-")) {
+                textField.setText("");
             }
         }
         if (e.getSource() == negativeButton) {

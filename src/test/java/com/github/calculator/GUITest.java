@@ -83,7 +83,7 @@ class GUITest {
     }
 
     @Test
-    void gui_showDifferenceOfTwoNumbersWhenOperatorIsMinus() {
+    void gui_showDifferenceBetweenTwoNumbersWhenOperatorIsMinus() {
         window.button("5").click();
         window.button("decimal").click();
         window.button("3").click();
